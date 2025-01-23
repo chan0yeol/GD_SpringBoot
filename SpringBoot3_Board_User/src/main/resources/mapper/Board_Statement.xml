@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.edu.model.mapper.IBoardDao">
+	<!-- 게시글 리스트 userBoardList -->
+	<select id="userBoardList" resultType="BoardVo">
+		<![CDATA[
+			SELECT SEQ, ID,
+			LPAD(' ',6*5*"DEPTH"+1,'&nbsp;')||
+			CASE 
+				WHEN "DEPTH" > 0 THEN '<img src="./img/reply.png">'
+			END || TITLE AS TITLE,
+			CONTENT, "REF", STEP,
+			"DEPTH", REGDATE, DELFLAG
+			FROM ANSWERBOARD a
+			ORDER BY REF DESC, STEP
+		]]>
+	</select>
+	<!-- 게시글 삭제하기 delflagBoard -->
+	<delete id="delflagBoard">
+		UPDATE ANSWERBOARD
+		SET DELFLAG = 'Y'
+		WHERE DELFLAG ='N'
+		AND SEQ IN
+		<foreach collection="list" item="seq" open="(" separator="," close=")">
+			#{seq}
+		</foreach>
+	</delete>
+	<!-- 게시글 쓰기 writeBoard -->
+	<insert id="writeBoard">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			SELECT
+			NVL(MAX(SEQ),0)+1 FROM ANSWERBOARD
+		</selectKey>
+		INSERT INTO ANSWERBOARD
+		(SEQ, ID, TITLE,
+		CONTENT, "REF", STEP,
+		"DEPTH",
+		REGDATE)
+		VALUES (#{seq},#{id},#{title},
+		#{content}, (SELECT
+		NVL(MAX(REF),0)+1 FROM ANSWERBOARD a),0,0,CURRENT_DATE)
+	</insert>
+	<!-- 게시글 상세보기 getOneBoard -->
+	<select id="getOneBoard" resultType="BoardVo">
+		SELECT SEQ, ID, TITLE,
+		CONTENT, "REF", STEP,
+		"DEPTH", TO_CHAR(REGDATE,'YYYY-MM-DD HH:mi:ss') AS REGDATE,
+		DELFLAG
+		FROM ANSWERBOARD
+		WHERE SEQ = #{seq}
+	</select>
+	<!-- 답글 수정 replyUpdate -->
+	<update id="replyUpdate">
+		UPDATE ANSWERBOARD
+		SET STEP = STEP+1
+		WHERE REF =
+		(SELECT REF FROM ANSWERBOARD WHERE SEQ = #{seq})
+		AND STEP > (SELECT
+		STEP FROM ANSWERBOARD WHERE SEQ = #{seq})
+	</update>
+	<!-- 답글 입력 replyInsert -->
+	<insert id="replyInsert">
+		INSERT INTO ANSWERBOARD
+		(SEQ, ID, TITLE,
+		CONTENT, "REF", STEP,
+		"DEPTH", REGDATE)
+		VALUES ((SELECT NVL(MAX(SEQ),0)+1 FROM ANSWERBOARD),#{id},#{title},
+		#{content}, (SELECT REF FROM ANSWERBOARD WHERE SEQ = #{seq}),
+		(SELECT
+		STEP FROM ANSWERBOARD WHERE SEQ = #{seq})+1,
+		(SELECT "DEPTH" FROM
+		ANSWERBOARD WHERE SEQ = #{seq})+1,CURRENT_DATE )
+	</insert>
+	<!-- 삭제된 게시글 조회 restoreBoard -->
+	<select id="restoreBoard" resultType="BoardVo">
+		SELECT SEQ, ID, TITLE,
+		CONTENT, "REF", STEP,
+		"DEPTH", TO_CHAR(REGDATE,'YYYY-MM-DD HH:mm:ss'), DELFLAG
+		FROM ANSWERBOARD a
+		WHERE DELFLAG = 'Y'
+	</select>
+	<!-- 게시글 복구 restoreDelflag -->
+	<update id="restoreDelflag">
+		UPDATE ANSWERBOARD
+		SET DELFLAG = 'N'
+		WHERE SEQ IN
+		<foreach collection="list" item="seq" open="(" separator=","
+			close=")">
+			#{seq}
+		</foreach>
+	</update>
+
+</mapper>
