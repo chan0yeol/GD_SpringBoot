@@ -1,0 +1,27 @@
+= RestFul API Docs
+:doctype: book
+:title: Car
+:icon: font
+:source-highlighter: highlighjs
+:toc: left
+:toclevels: 4
+:sectanchors:
+:sectlinks:
+:sectnums:
+:operation-curl-request-title: Example
+:operation-http-repsonse-title: Example
+
+[[vehicles]]
+= 차량조회
+
+[[vehicles_getVehicles]]
+== 전체 차량 조회
+
+=== curl request
+include::{snippets}/vechicle/curl-request.adoc[]
+== 요청
+include::{snippets}/vechicle/http-request.adoc[]
+== 응답
+include::{snippets}/vechicle/http-response.adoc[]
+== 응답결과
+include::{snippets}/vechicle/response-body.adoc[]
