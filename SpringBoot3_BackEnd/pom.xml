@@ -101,7 +101,7 @@
 		    <artifactId>jjwt-jackson</artifactId>
 		    <version>0.12.6</version>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -161,13 +161,6 @@
 						</configuration>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-				        <groupId>org.springframework.restdocs</groupId>
-				        <artifactId>spring-restdocs-asciidoctor</artifactId>
-				        <version>3.0.3</version>
-				      </dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

@@ -29,21 +29,21 @@ public class CarSample {
 //			Car kia = new Car("Kia", "ray", "White", "KKO-2243", 2020, 310000, owner2);
 //			ownerRepository.saveAll(List.of(owner1,owner2));
 //			carRepository.saveAll(List.of(ford, hyundai, kia));
-			
-			// TODO 005 Security에서 사용할 bcrypt로 암호화된 password를 가진 Sample 사용자 입력
-			
+//
+//			 TODO 005 Security에서 사용할 bcrypt로 암호화된 password를 가진 Sample 사용자 입력
+//
 //			User u1 = User.builder()
 //							.username("user")
 //							.password("$2y$04$Db/LonMuBz2iG474WefoP.a2J.68cdZ5ZqPuUbkG7LEVBfxwm159q")
 //							.role("USER")
 //							.build();
-//			
+//
 //			User u2 = User.builder()
 //					.username("admin")
 //					.password("$2y$04$Db/LonMuBz2iG474WefoP.a2J.68cdZ5ZqPuUbkG7LEVBfxwm159q")
 //					.role("ADMIN")
 //					.build();
-//			
+//
 //			userRepository.saveAll(List.of(u1,u2));
 
 		};
